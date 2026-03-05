@@ -1,6 +1,11 @@
 "use client";
 
+import Image from "next/image";
+import "yet-another-react-lightbox/styles.css";
 import { useState, useEffect, useRef } from "react";
+import YALightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/plugins/captions.css";
+import Captions from "yet-another-react-lightbox/plugins/captions";
 
 import { useFadeIn } from "@/hooks";
 
@@ -230,7 +235,7 @@ function Lightbox({
   onClose,
 }: {
   onClose: () => void;
-  item: { alt: string; src: string; color: string; label: string };
+  item: { alt: string; src?: string; color: string; label: string };
 }) {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -264,8 +269,19 @@ function Lightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className={`w-full aspect-video rounded-2xl bg-gradient-to-br ${item.color} flex items-end p-6 shadow-2xl`}
+          className={`relative w-full aspect-video rounded-2xl overflow-hidden bg-gradient-to-br ${item.color} flex items-end p-6 shadow-2xl`}
         >
+          {item.src && (
+            <Image
+              fill
+              priority
+              src={item.src}
+              alt={item.alt}
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 768px"
+            />
+          )}
+          <div className="absolute inset-0 bg-black/20" />
           <div className="bg-black/40 backdrop-blur-sm rounded-xl px-4 py-2">
             <p className="text-white font-semibold">{item.label}</p>
             <p className="text-white/60 text-sm mt-0.5">
@@ -273,9 +289,6 @@ function Lightbox({
             </p>
           </div>
         </div>
-        <p className="text-ink-500 text-xs text-center mt-3">
-          Здесь будет реальная фотография выполненной работы
-        </p>
       </div>
     </div>
   );
@@ -284,9 +297,20 @@ function Lightbox({
 function Portfolio() {
   const ref = useRef(null);
   const [activeTab, setActiveTab] = useState("print");
-  const [lightboxItem, setLightboxItem] = useState<any>(null);
+  const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   useFadeIn(ref);
+
+  const currentItems = portfolioItems[activeTab];
+
+  const slides = currentItems.map(
+    (item: { src?: string; alt: string; label: string }) => ({
+      src: item.src ?? "/placeholder.png",
+      alt: item.alt,
+      title: item.label,
+      description: "Пример работы · Копицентр Горловка",
+    }),
+  );
 
   return (
     <section
@@ -340,63 +364,76 @@ function Portfolio() {
           aria-label={portfolioTabs.find((t) => t.id === activeTab)?.label}
           className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
         >
-          {portfolioItems[activeTab].map(
-            (item: {
-              id: string;
-              alt: string;
-              src: string;
-              color: string;
-              label: string;
-            }) => (
+          {currentItems.map(
+            (
+              item: {
+                id: string;
+                alt: string;
+                src?: string;
+                color: string;
+                label: string;
+              },
+              idx: number,
+            ) => (
               <button
                 key={item.id}
-                onClick={() => setLightboxItem(item)}
+                onClick={() => setLightboxIndex(idx)}
                 aria-label={`Открыть: ${item.label}`}
                 className="photo-grid-item aspect-[4/3] relative rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary-500 text-left"
               >
-                {/* Placeholder gradient "image" */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${item.color} transition-transform duration-400 hover:scale-105`}
-                />
-                {/* Overlay */}
+                {item.src ? (
+                  <Image
+                    fill
+                    src={item.src}
+                    alt={item.alt}
+                    className="object-cover transition-transform duration-400 hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  />
+                ) : (
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${item.color} transition-transform duration-400 hover:scale-105`}
+                  />
+                )}
+
+                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                   <span className="text-white text-xs font-medium">
                     {item.label}
                   </span>
                 </div>
-                {/* Placeholder icon */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                    <svg
-                      className="w-5 h-5 text-white/40"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeWidth={1.5}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
+
+                {!item.src && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 text-white/40"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeWidth={1.5}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
                   </div>
-                </div>
-                {/* Label bottom */}
-                <div className="absolute bottom-0 left-0 right-0 p-2 pointer-events-none">
-                  <div className="bg-black/30 backdrop-blur-sm rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100">
-                    <span className="text-white text-xs">{item.label}</span>
-                  </div>
-                </div>
+                )}
               </button>
             ),
           )}
         </div>
       </div>
 
-      {lightboxItem && (
-        <Lightbox item={lightboxItem} onClose={() => setLightboxItem(null)} />
-      )}
+      <YALightbox
+        open={lightboxIndex >= 0}
+        index={lightboxIndex}
+        close={() => setLightboxIndex(-1)}
+        slides={slides}
+        plugins={[Captions]}
+      />
     </section>
   );
 }
