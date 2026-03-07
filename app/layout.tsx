@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import { Playfair_Display } from "next/font/google";
+import { jsonLd } from "./data";
 
 const playfair = Playfair_Display({
   subsets: ["latin", "cyrillic"],
@@ -10,6 +11,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  ),
   title: {
     template: "%s | Копицентр Горловка",
     default: "Копицентр на Центральном рынке | Горловка, ул. Изотова 7",
@@ -19,16 +23,28 @@ export const metadata = {
   keywords: [
     "копицентр Горловка",
     "ксерокопия Горловка",
+    "канцтовары Горловка",
+    "распечатать с телефона Горловка",
+    "цветная ксерокопия Горловка",
+    "запись на флешку Горловка",
+    "запись на диск Горловка",
+    "распечатать с диска Горловка",
+    "купить флешку Горловка",
+    "подставить форму Горловка",
+    "фото в военной форме Горловка",
     "печать фото Горловка",
     "фото на документы Горловка",
     "ламинирование Горловка",
     "цветная печать Горловка",
     "печать визиток Горловка",
     "сканирование Горловка",
+    "раскрасить фото Горловка",
+    "реставрация Горловка",
     "реставрация фотографий Горловка",
     "реставрация старых фотографий Горловка",
     "набор текста Горловка",
     "дизайн визиток Горловка",
+    "дизайн листовок Горловка",
     "Центральный рынок Горловка",
     "копицентр Изотова 7",
   ],
@@ -51,7 +67,7 @@ export const metadata = {
       {
         width: 1200,
         height: 630,
-        url: "/og-image.jpg",
+        url: "/og-image.png",
         alt: "Копицентр Горловка",
       },
     ],
@@ -74,73 +90,96 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const jsonLd = {
-    "@type": "LocalBusiness",
-    "@context": "https://schema.org",
-    name: "Копицентр на Центральном рынке",
-    description:
-      "Профессиональный копицентр в Горловке. Ксерокопия, печать, фото на документы, ламинирование, визитки, баннеры.",
-    address: {
-      addressCountry: "UA",
-      "@type": "PostalAddress",
-      addressLocality: "Горловка",
-      streetAddress: "ул. Изотова, 7",
-    },
-    geo: {
-      latitude: "48.2836",
-      longitude: "38.0542",
-      "@type": "GeoCoordinates",
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "08:00",
-        closes: "13:30",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Saturday", "Sunday"],
-        opens: "08:00",
-        closes: "12:00",
-      },
-    ],
-    priceRange: "₽",
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Услуги копицентра",
-      itemListElement: [
-        {
-          "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Ксерокопия" },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Цветная печать" },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Фото на документы" },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Ламинирование" },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Печать визиток" },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Сканирование" },
-        },
-      ],
-    },
-  };
-
   return (
     <html lang="ru" className={playfair.variable}>
       <head>
+        <link
+          rel="apple-touch-icon"
+          sizes="57x57"
+          href="/favicon/favicon-57x57.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="60x60"
+          href="/favicon/favicon-60x60.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="72x72"
+          href="/favicon/favicon-72x72.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="76x76"
+          href="/favicon/favicon-76x76.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="114x114"
+          href="/favicon/favicon-114x114.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="120x120"
+          href="/favicon/favicon-120x120.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="144x144"
+          href="/favicon/favicon-144x144.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="152x152"
+          href="/favicon/favicon-152x152.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicon/favicon-180x180.png"
+        />
+        <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon/favicon-16x16.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="96x96"
+          href="/favicon/favicon-96x96.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="/favicon/favicon-192x192.png"
+        />
+        <link
+          rel="shortcut icon"
+          type="image/x-icon"
+          href="/favicon/favicon.ico"
+        />
+        <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta
+          name="msapplication-TileImage"
+          content="/favicon/favicon-144x144.png"
+        />
+        <meta
+          name="msapplication-config"
+          content="/favicon/browserconfig.xml"
+        />
+        <link rel="manifest" href="/favicon/manifest.json" />
+        <meta name="theme-color" content="#ffffff" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

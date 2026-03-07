@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useRef } from "react";
 import "yet-another-react-lightbox/styles.css";
-import { useState, useEffect, useRef } from "react";
 import YALightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/plugins/captions.css";
 import Captions from "yet-another-react-lightbox/plugins/captions";
@@ -61,11 +61,11 @@ function Navbar() {
 
         {/* Mobile burger */}
         <button
-          className="md:hidden text-white p-2"
-          onClick={() => setOpen(!open)}
           aria-label="Открыть меню"
+          onClick={() => setOpen(!open)}
+          className="md:hidden text-white p-2"
         >
-          <div className="w-5 space-y-1">
+          <div className="w-5 flex flex-col gap-1">
             <span
               className={`block h-px bg-white transition-all ${open ? "rotate-45 translate-y-1.5" : ""}`}
             />
@@ -73,7 +73,7 @@ function Navbar() {
               className={`block h-px bg-white transition-all ${open ? "opacity-0" : ""}`}
             />
             <span
-              className={`block h-px bg-white transition-all ${open ? "-rotate-45 -translate-y-1.5" : ""}`}
+              className={`block h-px bg-white transition-all ${open ? "-rotate-45 -translate-y-1.5 mt-[2px]" : ""}`}
             />
           </div>
         </button>
@@ -122,7 +122,7 @@ function Hero() {
         }}
       />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center pt-24 pb-16 py-4">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center pt-24 pb-16">
         <div className="inline-flex items-center gap-2 bg-primary-500/10 border border-primary-500/20 rounded-full px-4 py-1.5 mb-8">
           <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse" />
           <span className="text-primary-400 text-sm font-medium">
@@ -141,16 +141,16 @@ function Hero() {
           Быстро и качественно&nbsp;— так работаем мы.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="w-full flex flex-col sm:flex-row gap-4 justify-center items-center px-4 sm:px-0">
           <a
             href="#services"
-            className="w-full sm:w-auto bg-primary-500 hover:bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-primary-500/20 hover:-translate-y-0.5"
+            className="block w-full sm:w-auto text-center bg-primary-500 hover:bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-primary-500/20 hover:-translate-y-0.5"
           >
             Наши услуги
           </a>
           <a
             href="#contacts"
-            className="w-full sm:w-auto border border-ink-600 hover:border-primary-500 text-ink-200 hover:text-primary-400 font-semibold px-8 py-3.5 rounded-xl transition-all"
+            className="block w-full sm:w-auto text-center border border-ink-600 hover:border-primary-500 text-ink-200 hover:text-primary-400 font-semibold px-8 py-3.5 rounded-xl transition-all"
           >
             Как нас найти
           </a>
@@ -230,73 +230,9 @@ function Services() {
   );
 }
 
-function Lightbox({
-  item,
-  onClose,
-}: {
-  onClose: () => void;
-  item: { alt: string; src?: string; color: string; label: string };
-}) {
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "";
-    };
-  }, [onClose]);
-
-  return (
-    <div
-      role="dialog"
-      onClick={onClose}
-      aria-modal="true"
-      aria-label={item.alt}
-      className="lightbox-overlay"
-    >
-      <button
-        onClick={onClose}
-        aria-label="Закрыть"
-        className="absolute top-4 right-4 text-white/60 hover:text-white w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-xl transition-colors"
-      >
-        ✕
-      </button>
-      <div
-        className="max-w-2xl w-full mx-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div
-          className={`relative w-full aspect-video rounded-2xl overflow-hidden bg-gradient-to-br ${item.color} flex items-end p-6 shadow-2xl`}
-        >
-          {item.src && (
-            <Image
-              fill
-              priority
-              src={item.src}
-              alt={item.alt}
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
-          )}
-          <div className="absolute inset-0 bg-black/20" />
-          <div className="bg-black/40 backdrop-blur-sm rounded-xl px-4 py-2">
-            <p className="text-white font-semibold">{item.label}</p>
-            <p className="text-white/60 text-sm mt-0.5">
-              Пример работы · Копицентр Горловка
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function Portfolio() {
   const ref = useRef(null);
-  const [activeTab, setActiveTab] = useState("print");
+  const [activeTab, setActiveTab] = useState("restovration");
   const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   useFadeIn(ref);
@@ -367,33 +303,25 @@ function Portfolio() {
           {currentItems.map(
             (
               item: {
-                id: string;
                 alt: string;
-                src?: string;
-                color: string;
+                src: string;
                 label: string;
               },
               idx: number,
             ) => (
               <button
-                key={item.id}
+                key={idx}
                 onClick={() => setLightboxIndex(idx)}
                 aria-label={`Открыть: ${item.label}`}
                 className="photo-grid-item aspect-[4/3] relative rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary-500 text-left"
               >
-                {item.src ? (
-                  <Image
-                    fill
-                    src={item.src}
-                    alt={item.alt}
-                    className="object-cover transition-transform duration-400 hover:scale-105"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
-                ) : (
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${item.color} transition-transform duration-400 hover:scale-105`}
-                  />
-                )}
+                <Image
+                  fill
+                  src={item.src}
+                  alt={item.alt}
+                  className="object-cover transition-transform duration-400 hover:scale-105"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                />
 
                 {/* Hover overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
@@ -469,9 +397,9 @@ function AppSection() {
                 <span className="text-primary-400">заранее с телефона</span>
               </h2>
               <p className="text-ink-300 mb-6 leading-relaxed">
-                Уникальная возможность: сделайте заказ прямо с телефона и
-                заберите готовые распечатки в удобное для вас время. Никаких
-                очередей!
+                Уникальная возможность: сделайте заказ прямо с телефона в
+                телеграме и заберите готовые распечатки в удобное для вас время.
+                Никаких очередей!
               </p>
               <ul className="space-y-3 text-sm text-ink-300">
                 {[
@@ -493,7 +421,7 @@ function AppSection() {
                   href="https://t.me/capyprintbot"
                   className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-400 text-white font-semibold px-6 py-3 rounded-xl transition-all hover:shadow-lg hover:shadow-primary-500/25 hover:-translate-y-0.5"
                 >
-                  Узнать подробнее →
+                  Заказать →
                 </a>
               </div>
             </div>
@@ -609,6 +537,31 @@ function Contacts() {
                 <br />
                 рядом с ТД Донбасс (Стройленд)
               </address>
+            </div>
+
+            {/* Phone */}
+            <div>
+              <div className="text-primary-500 text-xs font-semibold uppercase tracking-wider mb-3">
+                Телеграм
+              </div>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="https://t.me/fotomail24"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-primary-400 transition-all"
+                >
+                  @fotomail24 - Личные сообщения
+                </a>
+                <a
+                  href="https://t.me/capyprintbot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-primary-400 transition-all"
+                >
+                  @capyprintbot - Бот для заказов
+                </a>
+              </div>
             </div>
 
             {/* Schedule */}
