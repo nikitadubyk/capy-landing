@@ -107,6 +107,11 @@ export const portfolioItems: Record<string, any> = {
       alt: "Реставрация",
       label: "Реставрация фотографии",
     },
+    {
+      src: "/restovration/7.jpg",
+      alt: "Увеличение фото с реставрацией",
+      label: "Увеличение фото с реставрацией",
+    },
   ],
   design: [
     {
@@ -168,8 +173,18 @@ export const portfolioItems: Record<string, any> = {
     },
     {
       alt: "Календарь",
-      src: "/design/7.jpg",
+      src: "/souvenirs/6.jpg",
       label: "Календарь с вашим фото",
+    },
+    {
+      alt: "Магниты",
+      label: "Магниты",
+      src: "/souvenirs/7.jpg",
+    },
+    {
+      alt: "Полароид",
+      label: "Полароид",
+      src: "/souvenirs/8.jpg",
     },
   ],
 };

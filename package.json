@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
+    "@vercel/analytics": "^1.6.1",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^11.3.21",
     "lucide-react": "^0.575.0",

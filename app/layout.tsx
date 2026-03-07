@@ -1,7 +1,8 @@
-import "./globals.css";
-
+import { Analytics } from "@vercel/analytics/next";
 import { Playfair_Display } from "next/font/google";
+
 import { jsonLd } from "./data";
+import "./globals.css";
 
 const playfair = Playfair_Display({
   subsets: ["latin", "cyrillic"],
@@ -188,6 +189,7 @@ export default function RootLayout({
       <body>
         <div className="grain-overlay" aria-hidden="true" />
         {children}
+        <Analytics />
       </body>
     </html>
   );

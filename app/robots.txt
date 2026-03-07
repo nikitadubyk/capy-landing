@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://capy-landing.vercel.app/sitemap.xml
+Sitemap: https://kopicenter-gorlovka.vercel.app/sitemap.xml
