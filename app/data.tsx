@@ -203,6 +203,7 @@ export const links = [
   { href: "#app", label: "Приложение" },
   { href: "#store", label: "Товары" },
   { href: "#contacts", label: "Контакты" },
+  { href: "/blog", label: "Блог" },
 ];
 
 export const jsonLd = {

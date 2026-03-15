@@ -1,8 +1,8 @@
 import { Analytics } from "@vercel/analytics/next";
 import { Playfair_Display } from "next/font/google";
 
-import { jsonLd } from "./data";
 import "./globals.css";
+import { jsonLd } from "./data";
 
 const playfair = Playfair_Display({
   subsets: ["latin", "cyrillic"],
