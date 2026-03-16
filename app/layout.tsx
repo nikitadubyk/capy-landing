@@ -181,6 +181,7 @@ export default function RootLayout({
         />
         <link rel="manifest" href="/favicon/manifest.json" />
         <meta name="theme-color" content="#ffffff" />
+        <meta name="yandex-verification" content="e0b3f33ac66d2c48" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
