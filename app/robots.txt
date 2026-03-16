@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kopicenter-gorlovka.vercel.app/sitemap.xml
+Sitemap: https://kopicenter-gorlovka.ru/sitemap.xml
